@@ -86,6 +86,26 @@ A seção "Quem foi, filmou" traz três reels reais (@domini.film, @cabanaafrodi
 
 Hero (drone do anúncio, `a81.jpg`, mesma foto no desktop e no mobile: como é horizontal, o retrato usa `object-position: 72%` para o corte cair na cabana e não no morro) → faixa de prova social (noite) → silhueta da serra → A Cabana → destaques → **mar de nuvens** (full-bleed poético com as menções reais) → ambientes (trilho com 7 cards: quarto, sala, cozinha, jantar, estar & cinema, banheiro, área externa) → comodidades (noite) → momentos (filmstrip de fotos) → **reels + Instagram** (noite) → avaliações (resumo com louros + barras + carrossel com avatares reais) → localização (foto da cabana esmaecida ao fundo + mapa em fachada, sem endereço exato) → boas-vindas (acordeão nativo) → CTA final noturno com o logo → rodapé.
 
+## Disponibilidade (calendário do Airbnb)
+
+A seção "Datas" espelha o calendário do anúncio. A sincronia é manual, por comando:
+
+```bash
+npm run calendario
+```
+
+Depois é só rodar `npm run build:pages`, commitar e dar push.
+
+**O link .ics do Airbnb é secreto.** Além do token na URL, o arquivo traz, em cada reserva, a URL interna do painel da anfitriã (com o código de confirmação) e os últimos 4 dígitos do telefone do hóspede. Por isso:
+
+- o link mora em `.env.local`, que fica fora do Git (o modelo está em `.env.example`);
+- [scripts/calendario.mjs](scripts/calendario.mjs) descarta `SUMMARY`, `DESCRIPTION` e `UID`, guardando só as datas em `src/data/disponibilidade.json`;
+- nunca coloque o link direto no código nem em nenhum arquivo versionado.
+
+Se o link vazar, é só gerar outro: Airbnb → Calendário → Disponibilidade → Sincronizar calendários → Exportar calendário.
+
+O site é estático, então o navegador não busca o .ics em tempo real (o Airbnb também não libera CORS): o que aparece é a foto do calendário no momento do último `npm run calendario`.
+
 ## Antes de publicar
 
 1. **Domínio**: `SITE.url` está com placeholder `https://www.cabanaafrodite.com.br`. Corrija em `content.ts` antes do deploy (alimenta canonical, OG e JSON-LD).

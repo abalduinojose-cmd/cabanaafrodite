@@ -7,7 +7,14 @@
  * site segue funcionando igual.
  */
 
-export type ReserveLocation = "header" | "hero" | "spaces" | "reviews" | "final" | "sticky";
+export type ReserveLocation =
+  | "header"
+  | "hero"
+  | "spaces"
+  | "reviews"
+  | "datas"
+  | "final"
+  | "sticky";
 
 export type ContactLocation = "hero" | "final" | "floating" | "sticky" | "footer";
 

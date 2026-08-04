@@ -71,7 +71,7 @@ export function Header() {
             />
           </a>
 
-          <nav aria-label={A11Y.mainNav} className="hidden items-center gap-7 lg:flex">
+          <nav aria-label={A11Y.mainNav} className="hidden items-center gap-5 lg:flex xl:gap-7">
             {NAV.map((link) => (
               <a
                 key={link.href}

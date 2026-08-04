@@ -1,5 +1,6 @@
 import { About } from "@/components/sections/About";
 import { Amenities } from "@/components/sections/Amenities";
+import { Availability } from "@/components/sections/Availability";
 import { Clouds } from "@/components/sections/Clouds";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { Footer } from "@/components/sections/Footer";
@@ -45,6 +46,7 @@ export default function HomePage() {
         <Silhueta from="noite" to="creme" />
         <Reviews />
         <Location />
+        <Availability />
         <Rules />
 
         <FinalCta />

@@ -263,6 +263,7 @@ export const NAV: readonly NavLink[] = [
   { label: "Momentos", href: "#momentos" },
   { label: "Avaliações", href: "#avaliacoes" },
   { label: "Localização", href: "#localizacao" },
+  { label: "Datas", href: "#datas" },
 ] as const;
 
 /* -------------------------------------------------------------------------
@@ -740,6 +741,38 @@ export const RULES = {
       answer: "Self check-in com cofre de chaves.",
     },
   ] satisfies readonly Rule[],
+} as const;
+
+/* -------------------------------------------------------------------------
+   Disponibilidade (sincronizada com o calendário do Airbnb)
+   ------------------------------------------------------------------------- */
+
+export const AVAILABILITY = {
+  id: "datas",
+  eyebrow: "Disponibilidade",
+  title: "As datas que ainda estão livres.",
+  lead: "Calendário espelhado do Airbnb. A reserva, o preço e o pagamento continuam sendo feitos por lá, com toda a proteção da plataforma.",
+  legendaLivre: "Livre",
+  legendaOcupada: "Ocupada",
+  mesAnterior: "Ver mês anterior",
+  mesSeguinte: "Ver próximo mês",
+  atualizadoPrefixo: "Sincronizado com o Airbnb em",
+  cta: "Ver preços e reservar",
+  diasDaSemana: ["D", "S", "T", "Q", "Q", "S", "S"],
+  meses: [
+    "janeiro",
+    "fevereiro",
+    "março",
+    "abril",
+    "maio",
+    "junho",
+    "julho",
+    "agosto",
+    "setembro",
+    "outubro",
+    "novembro",
+    "dezembro",
+  ],
 } as const;
 
 /* -------------------------------------------------------------------------

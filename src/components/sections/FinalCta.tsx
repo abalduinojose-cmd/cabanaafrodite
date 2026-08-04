@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { LogoAfrodite } from "@/components/ui/Logo";
 import { Reveal } from "@/components/ui/Reveal";
-import { ACTIONS, CONTACT, FINAL_CTA } from "@/data/content";
+import { CONTACT, FINAL_CTA, RESERVAR } from "@/data/content";
 
 const HEADING_ID = "titulo-reserva";
 
@@ -36,13 +36,13 @@ export function FinalCta() {
           </h2>
 
           <Button
-            href={CONTACT.airbnb}
+            href={RESERVAR.href}
             size="lg"
             seta
             className="mt-9"
             track={{ kind: "reserve", location: "final" }}
           >
-            {ACTIONS.bookShort}
+            {RESERVAR.final}
           </Button>
 
           <Button

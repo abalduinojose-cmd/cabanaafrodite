@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { LogoMarca } from "@/components/ui/Logo";
-import { A11Y, ACTIONS, CONTACT, NAV } from "@/data/content";
+import { A11Y, ACTIONS, CONTACT, NAV, RESERVAR } from "@/data/content";
 import { cx } from "@/lib/cx";
 
 const HOME_HREF = "#topo";
@@ -89,8 +89,8 @@ export function Header() {
           <div className="flex items-center gap-3">
             {/* Em telas pequenas quem carrega a reserva é o CTA fixo. */}
             <div className="hidden sm:block">
-              <Button href={CONTACT.airbnb} size="sm" track={{ kind: "reserve", location: "header" }}>
-                {ACTIONS.bookShort}
+              <Button href={RESERVAR.href} size="sm" track={{ kind: "reserve", location: "header" }}>
+                {RESERVAR.curto}
               </Button>
             </div>
 
@@ -141,13 +141,14 @@ export function Header() {
 
           <div className="container-page flex flex-col gap-3 border-t border-creme/10 py-6">
             <Button
-              href={CONTACT.airbnb}
+              href={RESERVAR.href}
               size="lg"
               seta
               fullWidth
+              onNavigate={close}
               track={{ kind: "reserve", location: "header" }}
             >
-              {ACTIONS.bookShort}
+              {RESERVAR.curto}
             </Button>
             <Button
               href={CONTACT.whatsapp}

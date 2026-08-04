@@ -31,6 +31,8 @@ type ButtonProps = {
   readonly track?: ButtonTracking;
   readonly className?: string;
   readonly fullWidth?: boolean;
+  /** Chamado junto com o clique: serve para fechar o menu antes de rolar. */
+  readonly onNavigate?: () => void;
 };
 
 const VARIANTS: Record<ButtonVariant, string> = {
@@ -71,6 +73,7 @@ export function Button({
   track,
   className,
   fullWidth = false,
+  onNavigate,
 }: ButtonProps) {
   const isExternal = href.startsWith("http");
 
@@ -78,7 +81,14 @@ export function Button({
     <a
       href={href}
       {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      onClick={track ? () => report(track) : undefined}
+      onClick={
+        track || onNavigate
+          ? () => {
+              if (track) report(track);
+              onNavigate?.();
+            }
+          : undefined
+      }
       className={cx(
         "btn",
         VARIANTS[variant],

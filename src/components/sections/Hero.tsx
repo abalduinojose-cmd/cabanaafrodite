@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/Button";
 import { VideoFundo } from "@/components/ui/VideoFundo";
-import { A11Y, ACTIONS, CONTACT, HERO } from "@/data/content";
+import { A11Y, ACTIONS, CONTACT, HERO, RESERVAR } from "@/data/content";
 
 /**
  * O texto e os botões são Server Components: o LCP é a foto-pôster, que já
@@ -63,8 +63,8 @@ export function Hero() {
             className="rise mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
             style={{ animationDelay: "240ms" }}
           >
-            <Button href={CONTACT.airbnb} size="lg" seta track={{ kind: "reserve", location: "hero" }}>
-              {ACTIONS.bookLong}
+            <Button href={RESERVAR.href} size="lg" seta track={{ kind: "reserve", location: "hero" }}>
+              {RESERVAR.longo}
             </Button>
             <Button
               href={CONTACT.whatsapp}

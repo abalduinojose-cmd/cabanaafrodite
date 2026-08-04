@@ -4,7 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { IconeWhatsApp } from "@/components/ui/IconeWhatsApp";
-import { A11Y, CONTACT, STICKY } from "@/data/content";
+import { A11Y, CONTACT, RESERVAR, STICKY } from "@/data/content";
 import { cx } from "@/lib/cx";
 import { trackContactClick, trackReserveClick } from "@/lib/analytics";
 
@@ -40,9 +40,10 @@ export function StickyCta() {
     <>
       {/* Pílula de reserva */}
       <a
-        href={CONTACT.airbnb}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={RESERVAR.href}
+        {...(RESERVAR.href.startsWith("http")
+          ? { target: "_blank", rel: "noopener noreferrer" }
+          : {})}
         inert={!pastHero}
         onClick={() => trackReserveClick("sticky")}
         className={cx("cta-fixo", !pastHero && "cta-oculto")}

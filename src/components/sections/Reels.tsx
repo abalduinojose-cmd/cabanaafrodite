@@ -112,28 +112,58 @@ export function Reels() {
         </ul>
 
         <Reveal delay={0.12} className="lg:col-span-4">
-          <div className="rounded-3xl border border-creme/10 bg-noite-soft p-8">
-            <span className="inline-flex size-12 items-center justify-center rounded-full bg-linear-115 from-cafe-quente via-cafe to-cafe-deep text-branco">
-              <Instagram className="size-5" strokeWidth={1.75} aria-hidden />
-            </span>
+          {/* Cartão de perfil: um pedaço do feed no topo, o avatar montado
+              sobre a emenda e o handle logo abaixo, como no Instagram. */}
+          <article className="group/perfil relative overflow-hidden rounded-3xl border border-creme/10 bg-noite-soft">
+            <div className="relative grid grid-cols-3 gap-px bg-creme/10">
+              {REELS.instagramPreview.map((foto, indice) => (
+                <figure key={indice} className="relative aspect-square overflow-hidden bg-noite">
+                  <Image
+                    src={foto.image}
+                    alt=""
+                    fill
+                    placeholder="blur"
+                    sizes="12rem"
+                    className="object-cover transition-transform duration-700 ease-serra group-hover/perfil:scale-105"
+                  />
+                </figure>
+              ))}
+              {/* funde o mosaico no corpo do cartão */}
+              <div
+                aria-hidden
+                className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-noite-soft via-noite-soft/55 to-transparent"
+              />
+            </div>
 
-            <h3 className="mt-6 font-display text-[1.4rem] font-semibold leading-snug text-creme">
-              {REELS.instagramTitle}
-            </h3>
-            <p className="mt-3 text-[0.9375rem] leading-relaxed text-creme/75">
-              {REELS.instagramText}
-            </p>
+            <div className="relative -mt-9 px-7 pb-7">
+              <span className="inline-flex size-[3.25rem] items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#F9CE34_0%,#EE2A7B_52%,#6228D7_100%)] p-[2px] shadow-[0_10px_30px_-12px_rgb(238_42_123/0.65)]">
+                <span className="flex size-full items-center justify-center rounded-[0.85rem] bg-noite-soft text-creme">
+                  <Instagram className="size-[1.35rem]" strokeWidth={1.6} aria-hidden />
+                </span>
+              </span>
 
-            <a
-              href={CONTACT.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-contorno-claro mt-7 h-12 px-6 text-[0.875rem]"
-            >
-              <Instagram className="size-[1.15rem] shrink-0" strokeWidth={1.75} aria-hidden />
-              {REELS.instagramCta}
-            </a>
-          </div>
+              <p className="mt-4 font-display text-[1.05rem] font-semibold text-creme">
+                {REELS.instagramHandle}
+              </p>
+
+              <h3 className="mt-3 font-display text-[1.35rem] font-semibold leading-snug text-creme">
+                {REELS.instagramTitle}
+              </h3>
+              <p className="mt-2.5 text-[0.9375rem] leading-relaxed text-creme/70">
+                {REELS.instagramText}
+              </p>
+
+              <a
+                href={CONTACT.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn mt-6 h-12 w-full bg-[linear-gradient(135deg,#F9CE34_0%,#EE2A7B_52%,#6228D7_100%)] px-6 text-[0.875rem] text-branco shadow-[0_14px_30px_-14px_rgb(238_42_123/0.8)] hover:brightness-110"
+              >
+                <Instagram className="size-[1.15rem] shrink-0" strokeWidth={1.75} aria-hidden />
+                {REELS.instagramCta}
+              </a>
+            </div>
+          </article>
         </Reveal>
       </div>
     </Section>

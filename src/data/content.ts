@@ -228,6 +228,23 @@ export const SITE = {
    Rótulos reutilizados
    ------------------------------------------------------------------------- */
 
+/**
+ * Para onde os botões de reserva apontam.
+ *
+ * Com o motor de reservas ligado, tudo desce para o calendário do próprio
+ * site, onde o hóspede escolhe as datas e paga. Sem ele (a vitrine estática
+ * no GitHub Pages), os mesmos botões continuam levando ao Airbnb, para
+ * nunca existir um caminho que termina em nada.
+ */
+const RESERVAS_ATIVAS = process.env.NEXT_PUBLIC_RESERVAS_ATIVAS === "1";
+
+export const RESERVAR = {
+  href: RESERVAS_ATIVAS ? "#datas" : CONTACT.airbnb,
+  curto: RESERVAS_ATIVAS ? "Reservar" : "Reservar no Airbnb",
+  longo: RESERVAS_ATIVAS ? "Ver datas e reservar" : "Verificar disponibilidade",
+  final: RESERVAS_ATIVAS ? "Reservar agora" : "Reservar no Airbnb",
+} as const;
+
 export const ACTIONS = {
   bookShort: "Reservar no Airbnb",
   bookLong: "Verificar disponibilidade",
@@ -555,7 +572,14 @@ export const REELS = {
   instagramTitle: "Siga a cabana no Instagram",
   instagramText:
     "Todo dia tem foto nova da serra, do mar de nuvens e dos cantinhos da Afrodite. É por lá também que saem as datas que abrem de última hora.",
-  instagramCta: CONTACT.instagramHandle,
+  instagramCta: "Seguir",
+  instagramHandle: CONTACT.instagramHandle,
+  /** Mosaico do topo do cartão: um gostinho do feed. */
+  instagramPreview: [
+    { image: galeria04, alt: "" },
+    { image: galeria01, alt: "" },
+    { image: galeria11, alt: "" },
+  ] satisfies readonly Photo[],
 } as const;
 
 /* -------------------------------------------------------------------------
@@ -858,7 +882,7 @@ export const FINAL_CTA = {
 
 export const STICKY = {
   seal: `★ ${CONTACT.ratingDisplay} · Superhost`,
-  label: ACTIONS.bookShort,
+  label: RESERVAR.curto,
 } as const;
 
 /* -------------------------------------------------------------------------

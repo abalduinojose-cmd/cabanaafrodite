@@ -238,13 +238,23 @@ export const SITE = {
  */
 export const RESERVAS_ATIVAS = process.env.NEXT_PUBLIC_RESERVAS_ATIVAS === "1";
 
+/**
+ * Modo demonstração da prévia pública: o checkout aparece completo e
+ * navegável, mas o pagamento avisa que entra na versão final. Serve para o
+ * cliente aprovar a experiência antes de existir backend.
+ */
+export const RESERVAS_DEMO =
+  !RESERVAS_ATIVAS && process.env.NEXT_PUBLIC_RESERVAS_DEMO === "1";
+
+const CHECKOUT_VISIVEL = RESERVAS_ATIVAS || RESERVAS_DEMO;
+
 export const RESERVAR = {
   /** Página dedicada de checkout, aberta em uma aba só dela. */
-  href: RESERVAS_ATIVAS ? "/reserva" : CONTACT.airbnb,
+  href: CHECKOUT_VISIVEL ? "/reserva" : CONTACT.airbnb,
   novaAba: true,
-  curto: RESERVAS_ATIVAS ? "Reservar" : "Reservar no Airbnb",
-  longo: RESERVAS_ATIVAS ? "Ver datas e reservar" : "Verificar disponibilidade",
-  final: RESERVAS_ATIVAS ? "Reservar agora" : "Reservar no Airbnb",
+  curto: CHECKOUT_VISIVEL ? "Reservar" : "Reservar no Airbnb",
+  longo: CHECKOUT_VISIVEL ? "Ver datas e reservar" : "Verificar disponibilidade",
+  final: CHECKOUT_VISIVEL ? "Reservar agora" : "Reservar no Airbnb",
 } as const;
 
 export const ACTIONS = {
@@ -778,9 +788,10 @@ export const AVAILABILITY = {
   eyebrow: "Disponibilidade",
   title: "As datas que ainda estão livres.",
   /** Na home: mapa de datas, com o botão levando ao checkout ou ao Airbnb. */
-  lead: RESERVAS_ATIVAS
-    ? "Calendário sincronizado com o Airbnb. Veja o que está livre e reserve direto com a anfitriã, sem intermediário."
-    : "Calendário espelhado do Airbnb. A reserva, o preço e o pagamento continuam sendo feitos por lá, com toda a proteção da plataforma.",
+  lead:
+    RESERVAS_ATIVAS || RESERVAS_DEMO
+      ? "Calendário sincronizado com o Airbnb. Veja o que está livre e reserve direto com a anfitriã, sem intermediário."
+      : "Calendário espelhado do Airbnb. A reserva, o preço e o pagamento continuam sendo feitos por lá, com toda a proteção da plataforma.",
   /** Na página /reserva, onde a compra acontece de fato. */
   leadCheckout:
     "Escolha a chegada e a saída no calendário. A data fica bloqueada no seu nome assim que o pagamento for aprovado.",
@@ -789,7 +800,7 @@ export const AVAILABILITY = {
   mesAnterior: "Ver mês anterior",
   mesSeguinte: "Ver próximo mês",
   atualizadoPrefixo: "Sincronizado com o Airbnb em",
-  cta: RESERVAS_ATIVAS ? "Escolher datas e reservar" : "Ver preços e reservar",
+  cta: RESERVAS_ATIVAS || RESERVAS_DEMO ? "Escolher datas e reservar" : "Ver preços e reservar",
   diasDaSemana: ["D", "S", "T", "Q", "Q", "S", "S"],
   meses: [
     "janeiro",
@@ -826,6 +837,12 @@ export const RESERVA = {
   indisponivel:
     "A reserva direta pelo site ainda não está ligada nesta versão. Por enquanto, as datas e o pagamento ficam no Airbnb.",
   irParaAirbnb: "Reservar no Airbnb",
+  /** Modo demonstração da prévia pública. */
+  demoValores: "Valores de demonstração, ajustados antes de publicar.",
+  demoTitulo: "Prévia do site",
+  demoTexto:
+    "Nesta prévia o pagamento fica desligado. Na versão final, este botão leva direto ao checkout do Mercado Pago e a data é bloqueada na hora. Enquanto isso, a reserva continua pelo Airbnb ou pelo WhatsApp.",
+  demoFechar: "Entendi, voltar",
   resumoNoites: (n: number): string => `${n} ${n === 1 ? "noite" : "noites"}`,
   linhaDiarias: "Diárias",
   linhaLimpeza: "Taxa de limpeza",

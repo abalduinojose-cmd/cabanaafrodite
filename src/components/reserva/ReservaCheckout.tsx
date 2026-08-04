@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Calendario, LegendaDatas } from "@/components/reserva/Calendario";
 import { Button } from "@/components/ui/Button";
-import { CONTACT, RESERVA, RESERVAS_ATIVAS } from "@/data/content";
+import { CONTACT, RESERVA, RESERVAS_ATIVAS, RESERVAS_DEMO } from "@/data/content";
 import { noiteOcupada } from "@/lib/disponibilidade";
 import { cx } from "@/lib/cx";
 
@@ -26,6 +26,14 @@ type Precos = {
   readonly percentualCobrado: number;
 };
 
+/** Na prévia sem backend, o painel mostra valores de exemplo, rotulados. */
+const PRECOS_DEMO: Precos = {
+  noite: 650_00,
+  limpeza: 150_00,
+  minimoNoites: 1,
+  percentualCobrado: 100,
+};
+
 /**
  * A página de reserva de fato: calendário à esquerda, painel de resumo fixo
  * à direita. Quem chega aqui já decidiu; o trabalho do layout é não criar
@@ -37,9 +45,10 @@ export function ReservaCheckout() {
   const [hospedes, setHospedes] = useState(2);
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
+  const [avisoDemo, setAvisoDemo] = useState(false);
 
   const [ocupadasAoVivo, setOcupadasAoVivo] = useState<ReadonlySet<string> | null>(null);
-  const [precos, setPrecos] = useState<Precos | null>(null);
+  const [precos, setPrecos] = useState<Precos | null>(RESERVAS_DEMO ? PRECOS_DEMO : null);
 
   useEffect(() => {
     if (!RESERVAS_ATIVAS) return;
@@ -114,6 +123,12 @@ export function ReservaCheckout() {
     evento.preventDefault();
     if (!entrada || !saida) return;
 
+    // Prévia: em vez de cobrar, explica onde o pagamento entra.
+    if (RESERVAS_DEMO) {
+      setAvisoDemo(true);
+      return;
+    }
+
     const form = new FormData(evento.currentTarget);
     setEnviando(true);
     setErro(null);
@@ -148,8 +163,8 @@ export function ReservaCheckout() {
     }
   }
 
-  /* Vitrine estática: a página existe, mas a reserva acontece no Airbnb. */
-  if (!RESERVAS_ATIVAS) {
+  /* Vitrine estática sem modo demonstração: a reserva acontece no Airbnb. */
+  if (!RESERVAS_ATIVAS && !RESERVAS_DEMO) {
     return (
       <div className="container-page flex max-w-xl flex-col items-center py-24 text-center">
         <p className="text-[1.0625rem] leading-relaxed text-ink-muted">{RESERVA.indisponivel}</p>
@@ -196,12 +211,17 @@ export function ReservaCheckout() {
           className="rounded-[1.75rem] border border-ink/10 bg-branco p-6 shadow-[0_24px_60px_-30px_rgb(29_21_14/0.35)] md:p-7 lg:sticky lg:top-8"
         >
           {precos ? (
-            <p className="flex items-baseline gap-1.5">
-              <span className="font-display text-[1.75rem] font-semibold leading-none text-ink">
-                {dinheiro(precos.noite)}
-              </span>
-              <span className="text-sm text-ink-muted">{RESERVA.porNoite}</span>
-            </p>
+            <>
+              <p className="flex items-baseline gap-1.5">
+                <span className="font-display text-[1.75rem] font-semibold leading-none text-ink">
+                  {dinheiro(precos.noite)}
+                </span>
+                <span className="text-sm text-ink-muted">{RESERVA.porNoite}</span>
+              </p>
+              {RESERVAS_DEMO ? (
+                <p className="mt-1.5 text-[0.7rem] text-ink/45">{RESERVA.demoValores}</p>
+              ) : null}
+            </>
           ) : (
             <span aria-hidden className="block h-7 w-36 animate-pulse rounded-full bg-ink/8" />
           )}
@@ -325,6 +345,42 @@ export function ReservaCheckout() {
           </p>
         </form>
       </aside>
+
+      {/* Prévia: explica onde o pagamento entra, sem fingir que cobrou */}
+      {avisoDemo ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="titulo-demo"
+          className="fixed inset-0 z-50 flex items-end justify-center bg-noite/60 p-4 backdrop-blur-sm sm:items-center"
+        >
+          <div className="w-full max-w-md rounded-[1.75rem] border border-ink/10 bg-branco p-7 shadow-[0_30px_70px_-30px_rgb(29_21_14/0.6)]">
+            <p className="rotulo-caps text-[0.55rem] text-cafe-deep">{RESERVA.demoTitulo}</p>
+            <h2 id="titulo-demo" className="mt-3 font-display text-[1.35rem] font-semibold text-ink">
+              {RESERVA.enviar}
+            </h2>
+            <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink-muted">
+              {RESERVA.demoTexto}
+            </p>
+
+            <div className="mt-6 flex flex-col gap-2.5">
+              <Button href={CONTACT.airbnb} seta fullWidth>
+                {RESERVA.irParaAirbnb}
+              </Button>
+              <Button href={CONTACT.whatsapp} variant="contornoEscuro" whatsapp fullWidth>
+                {CONTACT.phoneDisplay}
+              </Button>
+              <button
+                type="button"
+                onClick={() => setAvisoDemo(false)}
+                className="link-draw mx-auto mt-1 text-sm text-ink-muted"
+              >
+                {RESERVA.demoFechar}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

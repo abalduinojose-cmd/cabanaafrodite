@@ -55,8 +55,10 @@ try {
       ...process.env,
       PAGES: "1",
       NEXT_PUBLIC_BASE_PATH: BASE_PATH,
-      // Sem backend não há formulário de reserva: fica o calendário e o Airbnb.
+      // Sem backend, o checkout não cobra de verdade...
       NEXT_PUBLIC_RESERVAS_ATIVAS: "0",
+      // ...mas aparece inteiro e navegável, para o cliente aprovar a experiência.
+      NEXT_PUBLIC_RESERVAS_DEMO: "1",
     },
   });
 } finally {

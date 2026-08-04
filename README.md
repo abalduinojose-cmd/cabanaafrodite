@@ -17,7 +17,10 @@ Next.js 15 (App Router, RSC por padrão), TypeScript `strict`, Tailwind CSS v4 (
 
 ## Prévia pública
 
-**https://abalduinojose-cmd.github.io/cabanaafrodite/**
+- Site: **https://abalduinojose-cmd.github.io/cabanaafrodite/**
+- Reserva: **https://abalduinojose-cmd.github.io/cabanaafrodite/reserva**
+
+Na prévia o checkout aparece inteiro e navegável (calendário, datas, hóspedes, valores de exemplo), mas o pagamento fica desligado: ao clicar em pagar, um aviso explica que o Mercado Pago entra na versão final e oferece Airbnb e WhatsApp. Ligado por `NEXT_PUBLIC_RESERVAS_DEMO`, que o `build:pages` define sozinho.
 
 Servida pelo GitHub Pages a partir de `main` + `/docs`. Para atualizar:
 

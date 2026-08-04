@@ -89,7 +89,12 @@ export function Header() {
           <div className="flex items-center gap-3">
             {/* Em telas pequenas quem carrega a reserva é o CTA fixo. */}
             <div className="hidden sm:block">
-              <Button href={RESERVAR.href} size="sm" track={{ kind: "reserve", location: "header" }}>
+              <Button
+                href={RESERVAR.href}
+                size="sm"
+                novaAba={RESERVAR.novaAba}
+                track={{ kind: "reserve", location: "header" }}
+              >
                 {RESERVAR.curto}
               </Button>
             </div>
@@ -145,6 +150,7 @@ export function Header() {
               size="lg"
               seta
               fullWidth
+              novaAba={RESERVAR.novaAba}
               onNavigate={close}
               track={{ kind: "reserve", location: "header" }}
             >

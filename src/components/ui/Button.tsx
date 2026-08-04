@@ -33,6 +33,8 @@ type ButtonProps = {
   readonly fullWidth?: boolean;
   /** Chamado junto com o clique: serve para fechar o menu antes de rolar. */
   readonly onNavigate?: () => void;
+  /** Força abrir em outra aba mesmo em link interno (a página de reserva). */
+  readonly novaAba?: boolean;
 };
 
 const VARIANTS: Record<ButtonVariant, string> = {
@@ -74,13 +76,14 @@ export function Button({
   className,
   fullWidth = false,
   onNavigate,
+  novaAba = false,
 }: ButtonProps) {
-  const isExternal = href.startsWith("http");
+  const outraAba = novaAba || href.startsWith("http");
 
   return (
     <a
       href={href}
-      {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      {...(outraAba ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       onClick={
         track || onNavigate
           ? () => {

@@ -39,6 +39,7 @@ export function FinalCta() {
             href={RESERVAR.href}
             size="lg"
             seta
+            novaAba={RESERVAR.novaAba}
             className="mt-9"
             track={{ kind: "reserve", location: "final" }}
           >

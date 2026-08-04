@@ -136,10 +136,8 @@ export function Reels() {
             </div>
 
             <div className="relative -mt-9 px-7 pb-7">
-              <span className="inline-flex size-[3.25rem] items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#F9CE34_0%,#EE2A7B_52%,#6228D7_100%)] p-[2px] shadow-[0_10px_30px_-12px_rgb(238_42_123/0.65)]">
-                <span className="flex size-full items-center justify-center rounded-[0.85rem] bg-noite-soft text-creme">
-                  <Instagram className="size-[1.35rem]" strokeWidth={1.6} aria-hidden />
-                </span>
+              <span className="inline-flex size-[3.25rem] items-center justify-center rounded-2xl border border-creme/20 bg-noite-soft text-creme">
+                <Instagram className="size-[1.35rem]" strokeWidth={1.5} aria-hidden />
               </span>
 
               <p className="mt-4 font-display text-[1.05rem] font-semibold text-creme">
@@ -157,7 +155,7 @@ export function Reels() {
                 href={CONTACT.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn mt-6 h-12 w-full bg-[linear-gradient(135deg,#F9CE34_0%,#EE2A7B_52%,#6228D7_100%)] px-6 text-[0.875rem] text-branco shadow-[0_14px_30px_-14px_rgb(238_42_123/0.8)] hover:brightness-110"
+                className="btn btn-contorno-claro mt-6 h-12 w-full px-6 text-[0.875rem]"
               >
                 <Instagram className="size-[1.15rem] shrink-0" strokeWidth={1.75} aria-hidden />
                 {REELS.instagramCta}

@@ -236,10 +236,12 @@ export const SITE = {
  * no GitHub Pages), os mesmos botões continuam levando ao Airbnb, para
  * nunca existir um caminho que termina em nada.
  */
-const RESERVAS_ATIVAS = process.env.NEXT_PUBLIC_RESERVAS_ATIVAS === "1";
+export const RESERVAS_ATIVAS = process.env.NEXT_PUBLIC_RESERVAS_ATIVAS === "1";
 
 export const RESERVAR = {
-  href: RESERVAS_ATIVAS ? "#datas" : CONTACT.airbnb,
+  /** Página dedicada de checkout, aberta em uma aba só dela. */
+  href: RESERVAS_ATIVAS ? "/reserva" : CONTACT.airbnb,
+  novaAba: true,
   curto: RESERVAS_ATIVAS ? "Reservar" : "Reservar no Airbnb",
   longo: RESERVAS_ATIVAS ? "Ver datas e reservar" : "Verificar disponibilidade",
   final: RESERVAS_ATIVAS ? "Reservar agora" : "Reservar no Airbnb",
@@ -775,13 +777,19 @@ export const AVAILABILITY = {
   id: "datas",
   eyebrow: "Disponibilidade",
   title: "As datas que ainda estão livres.",
-  lead: "Calendário espelhado do Airbnb. A reserva, o preço e o pagamento continuam sendo feitos por lá, com toda a proteção da plataforma.",
+  /** Na home: mapa de datas, com o botão levando ao checkout ou ao Airbnb. */
+  lead: RESERVAS_ATIVAS
+    ? "Calendário sincronizado com o Airbnb. Veja o que está livre e reserve direto com a anfitriã, sem intermediário."
+    : "Calendário espelhado do Airbnb. A reserva, o preço e o pagamento continuam sendo feitos por lá, com toda a proteção da plataforma.",
+  /** Na página /reserva, onde a compra acontece de fato. */
+  leadCheckout:
+    "Escolha a chegada e a saída no calendário. A data fica bloqueada no seu nome assim que o pagamento for aprovado.",
   legendaLivre: "Livre",
   legendaOcupada: "Ocupada",
   mesAnterior: "Ver mês anterior",
   mesSeguinte: "Ver próximo mês",
   atualizadoPrefixo: "Sincronizado com o Airbnb em",
-  cta: "Ver preços e reservar",
+  cta: RESERVAS_ATIVAS ? "Escolher datas e reservar" : "Ver preços e reservar",
   diasDaSemana: ["D", "S", "T", "Q", "Q", "S", "S"],
   meses: [
     "janeiro",
@@ -804,10 +812,20 @@ export const AVAILABILITY = {
    ------------------------------------------------------------------------- */
 
 export const RESERVA = {
-  escolhaEntrada: "Escolha a data de entrada",
-  escolhaSaida: "Agora a data de saída",
+  escolhaEntrada: "Escolha a data de entrada no calendário",
+  escolhaSaida: "Agora escolha a data de saída",
   periodoEscolhido: (entrada: string, saida: string): string => `Chegada ${entrada} · Saída ${saida}`,
   limpar: "Limpar datas",
+  chegada: "Chegada",
+  saida: "Saída",
+  selecione: "Selecionar",
+  porNoite: "por noite",
+  menosHospedes: "Um hóspede a menos",
+  maisHospedes: "Um hóspede a mais",
+  semDatas: "Escolha a chegada e a saída no calendário ao lado para ver o valor da estadia.",
+  indisponivel:
+    "A reserva direta pelo site ainda não está ligada nesta versão. Por enquanto, as datas e o pagamento ficam no Airbnb.",
+  irParaAirbnb: "Reservar no Airbnb",
   resumoNoites: (n: number): string => `${n} ${n === 1 ? "noite" : "noites"}`,
   linhaDiarias: "Diárias",
   linhaLimpeza: "Taxa de limpeza",
@@ -830,6 +848,23 @@ export const RESERVA = {
     generico: "Não consegui abrir o pagamento agora. Tente de novo ou chame no WhatsApp.",
   },
   ocupadaAviso: "Há noites ocupadas nesse intervalo.",
+} as const;
+
+/** Página /reserva, aberta em aba própria pelos botões de reserva. */
+export const PAGINA_RESERVA = {
+  /** O layout já acrescenta "· Cabana Afrodite" pelo template. */
+  titulo: "Reservar",
+  descricao:
+    "Escolha as datas e reserve a Cabana Afrodite direto com a anfitriã, sem intermediário.",
+  headline: "Escolha as datas de vocês.",
+  apoio: "Reserva direta com a anfitriã. A data fica bloqueada no seu nome assim que o pagamento for aprovado.",
+  voltar: "Voltar ao site",
+  duvidas: "Dúvidas no WhatsApp",
+  selos: {
+    nota: `${CONTACT.ratingDisplay} em ${CONTACT.reviewCount} avaliações no Airbnb`,
+    pagamento: "Pagamento processado pelo Mercado Pago",
+    checkin: "Self check-in com cofre de chaves",
+  },
 } as const;
 
 /** Checkout de demonstração, ativo só enquanto não há Access Token. */

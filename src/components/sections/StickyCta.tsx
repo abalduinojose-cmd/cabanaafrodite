@@ -41,9 +41,8 @@ export function StickyCta() {
       {/* Pílula de reserva */}
       <a
         href={RESERVAR.href}
-        {...(RESERVAR.href.startsWith("http")
-          ? { target: "_blank", rel: "noopener noreferrer" }
-          : {})}
+        target="_blank"
+        rel="noopener noreferrer"
         inert={!pastHero}
         onClick={() => trackReserveClick("sticky")}
         className={cx("cta-fixo", !pastHero && "cta-oculto")}

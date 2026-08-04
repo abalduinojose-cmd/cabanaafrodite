@@ -63,7 +63,13 @@ export function Hero() {
             className="rise mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
             style={{ animationDelay: "240ms" }}
           >
-            <Button href={RESERVAR.href} size="lg" seta track={{ kind: "reserve", location: "hero" }}>
+            <Button
+              href={RESERVAR.href}
+              size="lg"
+              seta
+              novaAba={RESERVAR.novaAba}
+              track={{ kind: "reserve", location: "hero" }}
+            >
               {RESERVAR.longo}
             </Button>
             <Button

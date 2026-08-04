@@ -798,6 +798,5 @@ export const FOOTER = {
     },
   ] satisfies readonly SocialLink[],
   regionLabel: CONTACT.region,
-  credit: "Site por FluxoIA Studio",
   rights: "Todos os direitos reservados.",
 } as const;

@@ -62,7 +62,6 @@ export function Footer() {
           <div className="flex flex-col items-center gap-2 text-[0.75rem] text-creme/45 sm:flex-row sm:justify-between">
             <p>{`© ${year} ${SITE.name}. ${FOOTER.rights}`}</p>
             <p className="max-sm:order-first">{FOOTER.regionLabel}</p>
-            <p>{FOOTER.credit}</p>
           </div>
         </div>
       </div>

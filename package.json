@@ -20,12 +20,15 @@
     "lucide-react": "^0.500.0",
     "motion": "^12.0.0",
     "next": "^15.3.0",
+    "pg": "^8.22.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.0",
     "@types/node": "^22.0.0",
+    "@types/pg": "^8.20.3",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "ffmpeg-static": "^5.3.0",

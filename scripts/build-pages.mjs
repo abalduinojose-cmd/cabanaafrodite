@@ -9,7 +9,7 @@
  *   npm run build:pages
  */
 import { execFileSync } from "node:child_process";
-import { access, cp, mkdir, rm, writeFile } from "node:fs/promises";
+import { access, cp, mkdir, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -27,12 +27,32 @@ async function existe(caminho) {
   }
 }
 
-execFileSync("npx", ["next", "build"], {
-  cwd: ROOT,
-  stdio: "inherit",
-  shell: true,
-  env: { ...process.env, PAGES: "1", NEXT_PUBLIC_BASE_PATH: BASE_PATH },
-});
+/* A exportação estática não comporta rotas de API (elas precisam de
+   servidor). O GitHub Pages é só a vitrine: o motor de reservas vive na
+   hospedagem com Node. Aqui a pasta sai do caminho durante o build e volta
+   logo depois, aconteça o que acontecer. */
+const API = join(ROOT, "src", "app", "api");
+const API_GUARDADA = join(ROOT, "src", "app", "_api-fora-do-pages");
+const temApi = await existe(API);
+
+if (temApi) await rename(API, API_GUARDADA);
+
+try {
+  execFileSync("npx", ["next", "build"], {
+    cwd: ROOT,
+    stdio: "inherit",
+    shell: true,
+    env: {
+      ...process.env,
+      PAGES: "1",
+      NEXT_PUBLIC_BASE_PATH: BASE_PATH,
+      // Sem backend não há formulário de reserva: fica o calendário e o Airbnb.
+      NEXT_PUBLIC_RESERVAS_ATIVAS: "0",
+    },
+  });
+} finally {
+  if (temApi) await rename(API_GUARDADA, API);
+}
 
 /* Com `distDir` customizado, o Next 15 escreve o site exportado dentro do
    próprio distDir em vez de criar `out/`. Aceita os dois. */

@@ -776,6 +776,54 @@ export const AVAILABILITY = {
 } as const;
 
 /* -------------------------------------------------------------------------
+   Reserva pelo site (só aparece com NEXT_PUBLIC_RESERVAS_ATIVAS=1)
+   ------------------------------------------------------------------------- */
+
+export const RESERVA = {
+  escolhaEntrada: "Escolha a data de entrada",
+  escolhaSaida: "Agora a data de saída",
+  limpar: "Limpar datas",
+  resumoNoites: (n: number): string => `${n} ${n === 1 ? "noite" : "noites"}`,
+  linhaDiarias: "Diárias",
+  linhaLimpeza: "Taxa de limpeza",
+  linhaTotal: "Total",
+  linhaAgora: "Você paga agora",
+  campos: {
+    nome: "Nome completo",
+    email: "E-mail",
+    telefone: "WhatsApp",
+    hospedes: "Hóspedes",
+  },
+  enviar: "Ir para o pagamento",
+  enviando: "Preparando o pagamento…",
+  seguranca: "Pagamento processado pelo Mercado Pago. A cabana fica reservada no seu nome assim que o pagamento é aprovado.",
+  erros: {
+    datas_ocupadas: "Alguém reservou essas datas agora há pouco. Escolha outras, por favor.",
+    minimo_noites: "A estadia mínima é maior que o período escolhido.",
+    contato_invalido: "Confira o nome, o e-mail e o WhatsApp.",
+    hospedes_invalido: "A cabana acomoda de 1 a 4 hóspedes.",
+    generico: "Não consegui abrir o pagamento agora. Tente de novo ou chame no WhatsApp.",
+  },
+  ocupadaAviso: "Há noites ocupadas nesse intervalo.",
+} as const;
+
+export const RESERVA_RETORNO = {
+  sucesso: {
+    titulo: "Reserva recebida!",
+    texto:
+      "Assim que o Mercado Pago confirmar o pagamento, a data fica bloqueada no seu nome e você recebe a confirmação. Qualquer dúvida, é só chamar no WhatsApp.",
+  },
+  erro: {
+    titulo: "O pagamento não foi concluído.",
+    texto:
+      "Nada foi cobrado e as datas continuam livres. Você pode tentar de novo ou falar com a gente pelo WhatsApp.",
+  },
+  falarWhatsapp: "Falar no WhatsApp",
+  voltar: "Voltar ao site",
+  tentarDeNovo: "Escolher datas de novo",
+} as const;
+
+/* -------------------------------------------------------------------------
    CTA final
    ------------------------------------------------------------------------- */
 

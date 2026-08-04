@@ -106,6 +106,49 @@ Se o link vazar, é só gerar outro: Airbnb → Calendário → Disponibilidade 
 
 O site é estático, então o navegador não busca o .ics em tempo real (o Airbnb também não libera CORS): o que aparece é a foto do calendário no momento do último `npm run calendario`.
 
+## Motor de reservas (pagamento no Mercado Pago)
+
+O código está pronto e desligado. Sem as variáveis de ambiente, o site funciona como vitrine e manda para o Airbnb, que é exatamente o que está no GitHub Pages hoje. Com elas, aparece o formulário e a reserva acontece aqui.
+
+### Por que não roda no GitHub Pages
+
+Pages serve arquivos, não executa código. O Mercado Pago exige servidor para criar a cobrança e para receber a confirmação (webhook), e o token secreto não pode ficar no navegador. O `build:pages` tira a pasta `src/app/api` do caminho durante a exportação e devolve depois, então a vitrine continua publicando normalmente.
+
+Para ligar as reservas, o site precisa ir para uma hospedagem que roda Node — Vercel é o caminho natural para Next.js e tem plano gratuito.
+
+### Como está montado
+
+| Rota | O que faz |
+|---|---|
+| `POST /api/reservas` | Valida datas e contato, calcula o preço **no servidor**, cria a reserva como pendente e devolve o link de pagamento |
+| `POST /api/webhooks/mercadopago` | Recebe a notificação, **confere a assinatura**, consulta o pagamento na API e confirma ou cancela |
+| `GET /api/disponibilidade` | Noites ocupadas, juntando Airbnb e banco |
+| `GET /api/calendario.ics` | Feed das reservas do site, para o Airbnb importar |
+
+**Duas estadias nunca se sobrepõem.** Quem garante isso é o banco, não o código: a restrição `EXCLUDE USING gist (periodo WITH &&)` em [db/schema.sql](db/schema.sql) rejeita fisicamente qualquer inserção que cruze com outra reserva ativa. Se duas pessoas apertarem "reservar" no mesmo segundo para a mesma noite, uma passa e a outra recebe "datas ocupadas".
+
+Uma reserva pendente segura a data por 30 minutos (configurável). Não pagou, a data volta ao mapa sozinha, sem precisar de cron.
+
+### A sincronia nos dois sentidos
+
+- **Airbnb → site**: o site lê o `.ics` do anúncio a cada 10 minutos.
+- **Site → Airbnb**: a anfitriã cola `https://SEU-DOMINIO/api/calendario.ics` em Airbnb › Calendário › Disponibilidade › Sincronizar calendários › Conectar outro site.
+
+**Atenção ao intervalo:** o Airbnb relê calendários importados a cada duas horas, mais ou menos. Existe, portanto, uma janela em que uma data vendida no site ainda aparece livre no Airbnb. Com pouco movimento o risco é baixo, mas ele existe e não há como eliminá-lo por iCal — só a API oficial de parceiros do Airbnb faria isso em tempo real, e ela exige aprovação comercial.
+
+### Passo a passo para ligar
+
+1. **Banco**: crie um Postgres (Neon, Supabase ou Vercel Postgres) e rode `psql "$DATABASE_URL" -f db/schema.sql`.
+2. **Mercado Pago**: em *Suas integrações*, crie uma aplicação, pegue o **Access Token de produção** e, em *Webhooks*, configure a URL `https://SEU-DOMINIO/api/webhooks/mercadopago` e copie a **chave secreta**.
+3. **Hospedagem**: importe o repositório na Vercel e preencha as variáveis de [.env.example](.env.example) no painel dela. Não coloque nenhuma dessas chaves em arquivo versionado.
+4. **Preços**: ajuste `PRECO_NOITE`, `TAXA_LIMPEZA` e `SINAL_PERCENTUAL` (100 cobra tudo na hora; 30 cobra 30% de sinal).
+5. **Calendário**: cole a URL do `.ics` do site no Airbnb, como acima.
+6. **Teste** com as credenciais de teste do Mercado Pago antes de virar a chave para produção.
+
+### Sobre vender fora do Airbnb
+
+Vender pelo site próprio, para quem chegou pelo Instagram ou Google, é legítimo e economiza a taxa da plataforma. Levar para fora um hóspede que chegou pelo Airbnb viola os termos e arrisca a conta e o Superhost. Vale manter os dois caminhos separados.
+
 ## Antes de publicar
 
 1. **Domínio**: `SITE.url` está com placeholder `https://www.cabanaafrodite.com.br`. Corrija em `content.ts` antes do deploy (alimenta canonical, OG e JSON-LD).

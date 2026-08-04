@@ -1,0 +1,517 @@
+@import "tailwindcss";
+
+/* --------------------------------------------------------------------------
+   Cabana Afrodite · Tokens de design
+   Paleta pedida pelo cliente: branco, preto e marrom café quente.
+   Linguagem: moderna e clean, remetendo à natureza (padrão Icarus).
+   -------------------------------------------------------------------------- */
+@theme {
+  /* Café quente: ação e destaques */
+  --color-cafe: #7a5236; /* primário: branco sobre ele dá 6,2:1 */
+  --color-cafe-quente: #9c6b44; /* topo do gradiente dos botões */
+  --color-cafe-deep: #573a25; /* hover e texto café sobre creme (7,9:1) */
+  --color-latte: #cfaa80; /* acentos sobre fundo escuro */
+
+  /* Branco e preto (quentes, nunca frios) */
+  --color-branco: #ffffff; /* cards e superfícies */
+  --color-creme: #faf7f2; /* fundo claro padrão */
+  --color-creme-dim: #f1ebe1; /* faixas alternadas */
+  --color-noite: #17110b; /* seções escuras, café-preto */
+  --color-noite-soft: #251b12; /* cards sobre a noite */
+
+  /* Tintas */
+  --color-ink: #1d150e; /* texto principal */
+  --color-ink-muted: rgb(29 21 14 / 0.66);
+
+  --font-display: var(--font-display-next), "Bricolage Grotesque", system-ui, sans-serif;
+  --font-body: var(--font-body-next), "Inter", system-ui, sans-serif;
+  --font-script: var(--font-script-next), "Allura", cursive;
+  --font-serif: var(--font-serif-next), "Instrument Serif", Georgia, serif;
+
+  --tracking-caps: 0.16em;
+  --ease-serra: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-creme);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    line-height: 1.7;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 640;
+    letter-spacing: -0.02em;
+    line-height: 1.06;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cafe);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-latte);
+  }
+
+  ::selection {
+    background-color: var(--color-cafe);
+    color: var(--color-creme);
+  }
+
+  /* Selo do Next em desenvolvimento (o "N" e o contador de issues).
+     `devIndicators: false` no next.config.ts derruba o indicador de rota,
+     mas não esse selo, então o portal do overlay inteiro fica oculto.
+     O elemento só existe em dev; erros seguem no terminal e no console. */
+  nextjs-portal {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Utilitários da marca
+   -------------------------------------------------------------------------- */
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-inline: clamp(1.25rem, 5vw, 3.5rem);
+}
+
+/* Rótulo em caps pequeno (eyebrows, selos) */
+@utility rotulo-caps {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+/* Frase poética em serifa itálica */
+@utility poetico {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Alinha o início dos trilhos à coluna do container, sangrando à direita */
+@utility gallery-inset {
+  --gallery-gutter: clamp(1.25rem, 5vw, 3.5rem);
+  padding-inline: max(var(--gallery-gutter), calc((100% - 80rem) / 2 + var(--gallery-gutter)));
+  scroll-padding-inline: max(var(--gallery-gutter), calc((100% - 80rem) / 2 + var(--gallery-gutter)));
+}
+
+/* --------------------------------------------------------------------------
+   Botões: pílulas modernas
+   -------------------------------------------------------------------------- */
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      transform 0.35s var(--ease-serra),
+      box-shadow 0.35s ease,
+      filter 0.3s ease,
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      color 0.3s ease;
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  /* Primário: gradiente café quente com brilho interno */
+  .btn-cafe {
+    background: linear-gradient(115deg, var(--color-cafe-quente) 0%, var(--color-cafe) 55%, var(--color-cafe-deep) 100%);
+    color: var(--color-branco);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.28),
+      0 14px 30px -12px rgb(87 58 37 / 0.65);
+  }
+  .btn-cafe:hover {
+    filter: brightness(1.07);
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.28),
+      0 20px 38px -14px rgb(87 58 37 / 0.75);
+  }
+
+  /* Contornos */
+  .btn-contorno-claro {
+    border: 1px solid rgb(255 255 255 / 0.55);
+    color: var(--color-branco);
+    backdrop-filter: blur(6px);
+  }
+  .btn-contorno-claro:hover {
+    background: var(--color-branco);
+    border-color: var(--color-branco);
+    color: var(--color-ink);
+  }
+  .btn-contorno-escuro {
+    border: 1px solid rgb(29 21 14 / 0.3);
+    color: var(--color-ink);
+  }
+  .btn-contorno-escuro:hover {
+    background: var(--color-ink);
+    border-color: var(--color-ink);
+    color: var(--color-creme);
+  }
+
+  /* Discreto: pílula de vidro para apoio, sem competir com o CTA principal */
+  .btn-discreto {
+    border: 1px solid rgb(255 255 255 / 0.22);
+    background: rgb(255 255 255 / 0.1);
+    color: rgb(255 255 255 / 0.9);
+    font-weight: 500;
+    backdrop-filter: blur(8px);
+  }
+  .btn-discreto:hover {
+    background: rgb(255 255 255 / 0.18);
+    border-color: rgb(255 255 255 / 0.4);
+    color: var(--color-branco);
+    transform: translateY(-1px);
+  }
+
+  /* Seta em círculo, dentro das pílulas */
+  .btn-seta {
+    display: inline-flex;
+    height: 2.1rem;
+    width: 2.1rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.18);
+    transition: transform 0.35s var(--ease-serra);
+  }
+  .btn:hover .btn-seta {
+    transform: translateX(3px);
+  }
+
+  /* Cartões */
+  .cartao {
+    background: linear-gradient(180deg, var(--color-branco) 0%, #f7f2ea 100%);
+    border: 1px solid rgb(29 21 14 / 0.08);
+    border-radius: 1.25rem;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      0 12px 30px -20px rgb(29 21 14 / 0.35);
+  }
+  .cartao-vivo {
+    transition:
+      transform 0.35s var(--ease-serra),
+      box-shadow 0.35s var(--ease-serra),
+      border-color 0.35s ease;
+  }
+  .cartao-vivo:hover {
+    transform: translateY(-4px);
+    border-color: rgb(156 107 68 / 0.5);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      0 24px 44px -22px rgb(29 21 14 / 0.4);
+  }
+
+  /* Setas de carrossel */
+  .seta-trilho {
+    display: inline-flex;
+    height: 2.75rem;
+    width: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgb(29 21 14 / 0.16);
+    color: var(--color-ink);
+    background: rgb(255 255 255 / 0.7);
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      color 0.3s ease,
+      transform 0.3s var(--ease-serra),
+      opacity 0.3s ease;
+    cursor: pointer;
+  }
+  .seta-trilho:hover:not(:disabled) {
+    background: var(--color-cafe);
+    border-color: var(--color-cafe);
+    color: var(--color-branco);
+    transform: translateY(-1px);
+  }
+  .seta-trilho:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .on-dark .seta-trilho {
+    border-color: rgb(250 247 242 / 0.3);
+    color: var(--color-creme);
+    background: rgb(250 247 242 / 0.08);
+  }
+  .on-dark .seta-trilho:hover:not(:disabled) {
+    background: var(--color-latte);
+    border-color: var(--color-latte);
+    color: var(--color-noite);
+  }
+
+  /* Sublinhado que se desenha */
+  .link-draw {
+    position: relative;
+    text-decoration: none;
+  }
+  .link-draw::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.35s var(--ease-serra);
+  }
+  .link-draw:hover::after,
+  .link-draw:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* Véus sobre fotos com texto */
+  .veu-hero {
+    background: linear-gradient(
+      180deg,
+      rgb(18 12 7 / 0.42) 0%,
+      rgb(18 12 7 / 0.12) 40%,
+      rgb(18 12 7 / 0.78) 100%
+    );
+  }
+  .veu-foto {
+    background: linear-gradient(
+      180deg,
+      rgb(18 12 7 / 0.2) 0%,
+      rgb(18 12 7 / 0.04) 34%,
+      rgb(18 12 7 / 0.55) 70%,
+      rgb(18 12 7 / 0.84) 100%
+    );
+  }
+
+  /* CTA fixo: pílula clara com blur (padrão aprovado no Icarus) */
+  .cta-fixo {
+    position: fixed;
+    z-index: 40;
+    left: 50%;
+    bottom: max(0.9rem, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.4rem 0.4rem 0.4rem 1.15rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    background: rgb(250 247 242 / 0.92);
+    border: 1px solid rgb(29 21 14 / 0.1);
+    backdrop-filter: blur(14px);
+    color: var(--color-ink);
+    box-shadow: 0 14px 34px -18px rgb(29 21 14 / 0.5);
+    transition:
+      transform 0.45s var(--ease-serra),
+      opacity 0.35s ease,
+      box-shadow 0.35s ease;
+  }
+  .cta-fixo:hover {
+    box-shadow: 0 20px 42px -18px rgb(29 21 14 / 0.55);
+  }
+  .cta-fixo:active {
+    transform: translateX(-50%) scale(0.98);
+  }
+  .cta-fixo.cta-oculto {
+    opacity: 0;
+    transform: translateX(-50%) translateY(160%);
+    pointer-events: none;
+  }
+  .cta-seta {
+    display: inline-flex;
+    height: 2.5rem;
+    width: 2.5rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: linear-gradient(115deg, var(--color-cafe-quente) 0%, var(--color-cafe) 55%, var(--color-cafe-deep) 100%);
+    color: var(--color-branco);
+    transition: transform 0.35s var(--ease-serra);
+  }
+  .cta-fixo:hover .cta-seta {
+    transform: translateX(3px);
+  }
+  @media (min-width: 768px) {
+    .cta-fixo {
+      left: auto;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      transform: none;
+    }
+    .cta-fixo:active {
+      transform: scale(0.98);
+    }
+    .cta-fixo.cta-oculto {
+      transform: translateY(160%);
+    }
+  }
+
+  /* Trilho filmstrip: altura fixa, larguras naturais, fade na borda direita */
+  .trilho-fotos {
+    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 2.5rem), transparent);
+    mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 2.5rem), transparent);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Transições entre seções (scroll-driven, sem JavaScript)
+
+   Tudo abaixo depende de `animation-timeline`, que degrada sozinho: onde o
+   navegador não suporta, a foto fica parada e o conteúdo aparece normal.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* Hero: a foto desce devagar enquanto a página sobe. */
+    @keyframes deriva-hero {
+      from {
+        transform: translate3d(0, 0, 0) scale(1.14);
+      }
+      to {
+        transform: translate3d(0, 5%, 0) scale(1.14);
+      }
+    }
+    .deriva-hero {
+      animation: deriva-hero linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100vh;
+    }
+
+    /* Fotos full-bleed do meio da página: parallax enquanto cruzam a tela.
+       O scale cobre a folga do translate, então nunca aparece borda. */
+    @keyframes deriva-foto {
+      from {
+        transform: translate3d(0, -4%, 0) scale(1.12);
+      }
+      to {
+        transform: translate3d(0, 4%, 0) scale(1.12);
+      }
+    }
+    .deriva-foto {
+      animation: deriva-foto linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+
+    /* Imagem que se abre como cortina ao entrar em cena. */
+    @keyframes cortina {
+      from {
+        clip-path: inset(18% 0 0 0 round 1.75rem);
+        opacity: 0.25;
+      }
+      to {
+        clip-path: inset(0 0 0 0 round 1.75rem);
+        opacity: 1;
+      }
+    }
+    .cortina {
+      animation: cortina linear both;
+      animation-timeline: view();
+      animation-range: entry 15% cover 40%;
+    }
+  }
+}
+
+/* Ponte entre uma seção de cor e uma foto full-bleed: a cor vaza por cima
+   da imagem e some, então o corte entre as seções deixa de existir. */
+@utility ponte-topo-creme {
+  background-image: linear-gradient(to bottom, var(--color-creme) 0%, transparent 100%);
+}
+@utility ponte-base-branco {
+  background-image: linear-gradient(to top, var(--color-branco) 0%, transparent 100%);
+}
+@utility ponte-base-noite {
+  background-image: linear-gradient(to top, var(--color-noite) 0%, transparent 100%);
+}
+
+/* --------------------------------------------------------------------------
+   Animações
+   -------------------------------------------------------------------------- */
+@utility rise {
+  animation: rise 0.9s var(--ease-serra) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sem JavaScript o Motion nunca dispara a entrada; devolve a opacidade. */
+@media (scripting: none) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* O Motion escreve o transform inline; anulado, sobra só o fade. */
+  [data-reveal] {
+    transform: none !important;
+  }
+}

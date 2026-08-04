@@ -19,6 +19,10 @@ const RESERVAS_ATIVAS = process.env.NEXT_PUBLIC_RESERVAS_ATIVAS === "1";
 const dinheiro = (centavos: number): string =>
   (centavos / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+/** `2026-09-18` vira `18 de set.` */
+const diaCurto = (dia: string): string =>
+  new Date(`${dia}T12:00:00Z`).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+
 function primeiroDiaDoMes(): Date {
   const agora = new Date();
   return new Date(Date.UTC(agora.getUTCFullYear(), agora.getUTCMonth(), 1));
@@ -302,10 +306,12 @@ export function Availability() {
             </ul>
 
             {RESERVAS_ATIVAS ? (
-              <p className="mt-6 text-[0.9375rem] text-ink/80">
-                {entrada === null || saida !== null
-                  ? RESERVA.escolhaEntrada
-                  : RESERVA.escolhaSaida}
+              <p className="mt-6 text-[0.9375rem] font-medium text-ink/85">
+                {entrada && saida
+                  ? RESERVA.periodoEscolhido(diaCurto(entrada), diaCurto(saida))
+                  : entrada
+                    ? RESERVA.escolhaSaida
+                    : RESERVA.escolhaEntrada}
               </p>
             ) : (
               <>

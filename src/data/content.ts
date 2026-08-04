@@ -782,6 +782,7 @@ export const AVAILABILITY = {
 export const RESERVA = {
   escolhaEntrada: "Escolha a data de entrada",
   escolhaSaida: "Agora a data de saída",
+  periodoEscolhido: (entrada: string, saida: string): string => `Chegada ${entrada} · Saída ${saida}`,
   limpar: "Limpar datas",
   resumoNoites: (n: number): string => `${n} ${n === 1 ? "noite" : "noites"}`,
   linhaDiarias: "Diárias",
@@ -805,6 +806,21 @@ export const RESERVA = {
     generico: "Não consegui abrir o pagamento agora. Tente de novo ou chame no WhatsApp.",
   },
   ocupadaAviso: "Há noites ocupadas nesse intervalo.",
+} as const;
+
+/** Checkout de demonstração, ativo só enquanto não há Access Token. */
+export const SIMULACAO = {
+  selo: "Modo demonstração",
+  titulo: "Conferir o fluxo de pagamento",
+  explicacao:
+    "Nenhuma cobrança é feita e nenhum dado de pagamento é pedido aqui. Esta tela existe para percorrer a reserva de ponta a ponta antes de ligar o Mercado Pago. Escolha um desfecho para seguir.",
+  hospede: "Hóspede",
+  estadia: "Estadia",
+  aPagar: "Valor da reserva",
+  aprovar: "Simular pagamento aprovado",
+  recusar: "Simular pagamento recusado",
+  rodape:
+    "Assim que o Access Token do Mercado Pago for configurado, esta tela deixa de existir e o hóspede vai direto para o checkout real.",
 } as const;
 
 export const RESERVA_RETORNO = {

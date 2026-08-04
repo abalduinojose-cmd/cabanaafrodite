@@ -1,8 +1,13 @@
 import "server-only";
 
 /**
- * Configuração que só existe no servidor. Nada daqui pode vazar para o
- * navegador: são credenciais e regras de preço.
+ * Configuração que só existe no servidor: credenciais e regras de preço.
+ *
+ * O sistema roda em dois modos, e ele se decide sozinho pelo que existe no
+ * ambiente. Sem `DATABASE_URL` as reservas ficam na memória do processo;
+ * sem `MP_ACCESS_TOKEN` o checkout é uma simulação. Isso permite operar e
+ * testar o fluxo inteiro antes de abrir conta em qualquer lugar, e ligar o
+ * de verdade depois sem tocar em uma linha de código.
  */
 
 function obrigatoria(nome: string): string {
@@ -21,6 +26,19 @@ function numero(nome: string, padrao: number): number {
 
 export const RESERVAS_ATIVAS = process.env.NEXT_PUBLIC_RESERVAS_ATIVAS === "1";
 
+/** Onde as reservas ficam guardadas e quem processa o pagamento. */
+export const MODO = {
+  get banco(): "postgres" | "memoria" {
+    return process.env.DATABASE_URL ? "postgres" : "memoria";
+  },
+  get pagamento(): "mercadopago" | "simulado" {
+    return process.env.MP_ACCESS_TOKEN ? "mercadopago" : "simulado";
+  },
+  get emDemonstracao(): boolean {
+    return this.banco === "memoria" || this.pagamento === "simulado";
+  },
+} as const;
+
 export const env = {
   get databaseUrl(): string {
     return obrigatoria("DATABASE_URL");
@@ -33,7 +51,7 @@ export const env = {
   },
   /** URL pública do site, usada nos retornos do checkout e no webhook. */
   get siteUrl(): string {
-    return obrigatoria("NEXT_PUBLIC_SITE_URL").replace(/\/$/, "");
+    return (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:5210").replace(/\/$/, "");
   },
   /** Link secreto do calendário do Airbnb. Opcional: sem ele, só o banco conta. */
   get airbnbIcalUrl(): string | undefined {

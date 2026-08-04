@@ -136,6 +136,19 @@ Uma reserva pendente segura a data por 30 minutos (configurável). Não pagou, a
 
 **Atenção ao intervalo:** o Airbnb relê calendários importados a cada duas horas, mais ou menos. Existe, portanto, uma janela em que uma data vendida no site ainda aparece livre no Airbnb. Com pouco movimento o risco é baixo, mas ele existe e não há como eliminá-lo por iCal — só a API oficial de parceiros do Airbnb faria isso em tempo real, e ela exige aprovação comercial.
 
+### Rodando agora, sem conta em lugar nenhum
+
+O sistema se adapta ao que existe no ambiente, então dá para operar o fluxo inteiro antes de abrir conta:
+
+| Falta | O que acontece |
+|---|---|
+| `DATABASE_URL` | As reservas ficam na memória do processo. Serve para experimentar; some ao reiniciar |
+| `MP_ACCESS_TOKEN` | O checkout vira uma tela de demonstração com dois botões, "aprovado" e "recusado" |
+
+Para ver funcionando: copie `.env.example` para `.env.local`, deixe só `NEXT_PUBLIC_RESERVAS_ATIVAS=1` (e o `AIRBNB_ICAL_URL`, se quiser o calendário real) e rode `npm run dev`.
+
+A tela de demonstração **não pede nem processa nenhum dado de pagamento** e se recusa a abrir quando o Access Token está configurado. Assim que ele existir, ela some e o hóspede vai direto para o checkout do Mercado Pago, sem mudar uma linha de código.
+
 ### Passo a passo para ligar
 
 1. **Banco**: crie um Postgres (Neon, Supabase ou Vercel Postgres) e rode `psql "$DATABASE_URL" -f db/schema.sql`.

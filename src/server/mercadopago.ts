@@ -1,7 +1,7 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-import { env } from "@/server/env";
+import { env, MODO } from "@/server/env";
 
 /**
  * Integração com o Mercado Pago pela API REST, sem SDK.
@@ -31,6 +31,18 @@ export type DadosCheckout = {
 };
 
 export async function criarPreferencia(dados: DadosCheckout): Promise<Preferencia> {
+  /* Sem Access Token, o checkout é uma simulação interna: o hóspede vai
+     para uma página que deixa claro que nada está sendo cobrado e que
+     serve só para percorrer o fluxo. Assim que MP_ACCESS_TOKEN existir no
+     ambiente, este atalho some e o checkout real assume. */
+  if (MODO.pagamento === "simulado") {
+    console.warn("[pagamento] sem MP_ACCESS_TOKEN: usando o checkout de demonstração.");
+    return {
+      id: `simulado-${dados.reservaId}`,
+      init_point: `${env.siteUrl}/reserva/simulacao?id=${dados.reservaId}`,
+    };
+  }
+
   const resposta = await fetch(`${API}/checkout/preferences`, {
     method: "POST",
     headers: {

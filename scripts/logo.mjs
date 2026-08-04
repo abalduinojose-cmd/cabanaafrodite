@@ -23,8 +23,8 @@ const OUT = join(ROOT, "public", "logo");
    apertado de propósito: a vinheta escura dos cantos do mockup chega a 0.29
    e não pode virar sujeira translúcida na máscara.
    alpha = v * a + b, com v em 0..255 (sharp satura em 0 e 255). */
-const CLARO = 0.24 * 255;
-const ESCURO = 0.1 * 255;
+const CLARO = 0.17 * 255;
+const ESCURO = 0.06 * 255;
 const A = -255 / (CLARO - ESCURO);
 const B = (CLARO * 255) / (CLARO - ESCURO);
 

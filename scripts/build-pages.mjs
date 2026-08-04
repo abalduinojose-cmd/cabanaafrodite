@@ -27,15 +27,24 @@ async function existe(caminho) {
   }
 }
 
-/* A exportação estática não comporta rotas de API (elas precisam de
-   servidor). O GitHub Pages é só a vitrine: o motor de reservas vive na
-   hospedagem com Node. Aqui a pasta sai do caminho durante o build e volta
-   logo depois, aconteça o que acontecer. */
-const API = join(ROOT, "src", "app", "api");
-const API_GUARDADA = join(ROOT, "src", "app", "_api-fora-do-pages");
-const temApi = await existe(API);
+/* A exportação estática não comporta nada que precise de servidor: rotas de
+   API e páginas `force-dynamic`. O GitHub Pages é só a vitrine, e o motor de
+   reservas vive na hospedagem com Node. Estas pastas saem do caminho durante
+   o build e voltam logo depois, aconteça o que acontecer. */
+const SO_COM_SERVIDOR = [
+  ["src/app/api", "src/app/_api-fora-do-pages"],
+  ["src/app/reserva/simulacao", "src/app/reserva/_simulacao-fora-do-pages"],
+];
 
-if (temApi) await rename(API, API_GUARDADA);
+const movidas = [];
+for (const [origem, destino] of SO_COM_SERVIDOR) {
+  const de = join(ROOT, origem);
+  const para = join(ROOT, destino);
+  if (await existe(de)) {
+    await rename(de, para);
+    movidas.push([para, de]);
+  }
+}
 
 try {
   execFileSync("npx", ["next", "build"], {
@@ -51,7 +60,7 @@ try {
     },
   });
 } finally {
-  if (temApi) await rename(API_GUARDADA, API);
+  for (const [de, para] of movidas) await rename(de, para);
 }
 
 /* Com `distDir` customizado, o Next 15 escreve o site exportado dentro do

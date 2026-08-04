@@ -15,6 +15,22 @@ Objetivo, em ordem: levar o visitante à reserva no Airbnb, capturar contato pel
 
 Next.js 15 (App Router, RSC por padrão), TypeScript `strict`, Tailwind CSS v4 (`@theme` em [globals.css](src/app/globals.css)), Motion nas entradas, `next/image`, `next/font`, `lucide-react`. Sem biblioteca de UI.
 
+## Prévia pública
+
+**https://abalduinojose-cmd.github.io/cabanaafrodite/**
+
+Servida pelo GitHub Pages a partir de `main` + `/docs`. Para atualizar:
+
+```bash
+npm run build:pages
+```
+
+Depois é só commitar a pasta `docs/` e dar push; o Pages republica em cerca de um minuto.
+
+O `build:pages` roda o Next em modo exportação estática (`PAGES=1`), com `basePath` `/cabanaafrodite`, imagens sem otimização sob demanda (o Pages não tem servidor) e um `.nojekyll` na saída, sem o qual o Jekyll ignoraria a pasta `_next/` e o site subiria sem CSS.
+
+Caminhos escritos à mão que apontam para `public/` (vídeo do hero, reels, avatares, máscara do logo) passam por [`asset()`](src/lib/asset.ts), que acrescenta o `basePath` só nesse modo. O build normal (`npm run build`), para Vercel ou qualquer host próprio, continua na raiz e com otimização de imagem ligada.
+
 ## Como rodar
 
 ```bash

@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
         distDir: ".next-pages",
         basePath,
         assetPrefix: basePath,
+        /* Gera `reserva/index.html` em vez de `reserva.html`. O GitHub Pages
+           serve o índice do diretório, então a página abre tanto em
+           /reserva quanto em /reserva/ — sem isso, a URL com barra final
+           dava 404, e é fácil um link chegar assim ao cliente. */
+        trailingSlash: true,
       }
     : {}),
   images: {

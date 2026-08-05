@@ -9,6 +9,7 @@
  *   npm run build:pages
  */
 import { execFileSync } from "node:child_process";
+import { renameSync } from "node:fs";
 import { access, cp, mkdir, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -36,6 +37,31 @@ const SO_COM_SERVIDOR = [
   ["src/app/reserva/simulacao", "src/app/reserva/_simulacao-fora-do-pages"],
 ];
 
+/** Devolve tudo para o lugar. Idempotente: pode rodar quantas vezes for. */
+async function restaurar() {
+  for (const [origem, destino] of SO_COM_SERVIDOR) {
+    const de = join(ROOT, destino);
+    const para = join(ROOT, origem);
+    if ((await existe(de)) && !(await existe(para))) {
+      // O dev server pode segurar a pasta por um instante; insiste um pouco.
+      for (let tentativa = 1; ; tentativa += 1) {
+        try {
+          await rename(de, para);
+          break;
+        } catch (erro) {
+          if (tentativa >= 5) throw erro;
+          await new Promise((r) => setTimeout(r, 300 * tentativa));
+        }
+      }
+    }
+  }
+}
+
+/* Se um build anterior morreu no meio (Ctrl+C, processo derrubado), as
+   pastas ficaram para trás e o backend some do projeto. Antes de qualquer
+   coisa, devolve o que estiver fora do lugar. */
+await restaurar();
+
 const movidas = [];
 for (const [origem, destino] of SO_COM_SERVIDOR) {
   const de = join(ROOT, origem);
@@ -45,6 +71,20 @@ for (const [origem, destino] of SO_COM_SERVIDOR) {
     movidas.push([para, de]);
   }
 }
+
+// Rede de segurança: sinal ou exceção não deixam o projeto quebrado.
+const aoMorrer = () => {
+  for (const [origem, destino] of SO_COM_SERVIDOR) {
+    try {
+      renameSync(join(ROOT, destino), join(ROOT, origem));
+    } catch {
+      /* já estava no lugar */
+    }
+  }
+  process.exit(1);
+};
+process.once("SIGINT", aoMorrer);
+process.once("SIGTERM", aoMorrer);
 
 try {
   execFileSync("npx", ["next", "build"], {
@@ -62,7 +102,7 @@ try {
     },
   });
 } finally {
-  for (const [de, para] of movidas) await rename(de, para);
+  await restaurar();
 }
 
 /* Com `distDir` customizado, o Next 15 escreve o site exportado dentro do

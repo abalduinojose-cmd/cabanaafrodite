@@ -4,6 +4,7 @@ import { CalendarCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { LogoAfrodite } from "@/components/ui/Logo";
 import { CONTACT, RESERVA_RETORNO } from "@/data/content";
+import { asset } from "@/lib/asset";
 
 export const metadata: Metadata = {
   title: RESERVA_RETORNO.sucesso.titulo,
@@ -32,7 +33,7 @@ export default function ObrigadoPage() {
           <Button href={CONTACT.whatsapp} whatsapp track={{ kind: "contact", location: "final" }}>
             {RESERVA_RETORNO.falarWhatsapp}
           </Button>
-          <Button href="/" variant="contornoClaro">
+          <Button href={asset("/")} variant="contornoClaro">
             {RESERVA_RETORNO.voltar}
           </Button>
         </div>

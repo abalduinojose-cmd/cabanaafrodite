@@ -5,6 +5,7 @@ import { ReservaCheckout } from "@/components/reserva/ReservaCheckout";
 import { IconeWhatsApp } from "@/components/ui/IconeWhatsApp";
 import { LogoMarca } from "@/components/ui/Logo";
 import { CONTACT, PAGINA_RESERVA, SITE } from "@/data/content";
+import { asset } from "@/lib/asset";
 
 export const metadata: Metadata = {
   title: PAGINA_RESERVA.titulo,
@@ -28,14 +29,14 @@ export default function ReservaPage() {
       <header className="border-b border-ink/6">
         <div className="container-page flex h-[4.25rem] items-center justify-between gap-6">
           <a
-            href="/"
+            href={asset("/")}
             className="link-draw rotulo-caps inline-flex items-center gap-2 text-[0.625rem] text-ink-muted transition-colors hover:text-ink"
           >
             <ArrowLeft className="size-3.5" strokeWidth={1.75} aria-hidden />
             {PAGINA_RESERVA.voltar}
           </a>
 
-          <a href="/" aria-label={SITE.name}>
+          <a href={asset("/")} aria-label={SITE.name}>
             <LogoMarca className="h-10 text-ink" />
           </a>
 

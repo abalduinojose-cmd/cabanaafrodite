@@ -4,6 +4,7 @@ import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { LogoAfrodite } from "@/components/ui/Logo";
 import { CONTACT, RESERVA_RETORNO } from "@/data/content";
+import { asset } from "@/lib/asset";
 
 export const metadata: Metadata = {
   title: RESERVA_RETORNO.erro.titulo,
@@ -29,7 +30,7 @@ export default function ErroPage() {
         </p>
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <Button href="/#datas" seta>
+          <Button href={asset("/#datas")} seta>
             {RESERVA_RETORNO.tentarDeNovo}
           </Button>
           <Button
